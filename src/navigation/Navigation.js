@@ -8,15 +8,21 @@ import {
     Hidden,
     Drawer,
     Divider,
-    IconButton
+    IconButton,
+    Button,
+    Menu,
+    MenuItem,
 } from "@material-ui/core";
+import AccountCircle from '@material-ui/icons/AccountCircle';
 import Clear from "@material-ui/icons/Clear";
 import MenuIcon from "@material-ui/icons/Menu";
 import { isMdScreen } from "utils/dimension";
 import { withRouter } from "react-router-dom";
-import navLogo from 'logo.svg';
+import navLogo from 'image/badminton-logo.png';
 import withRoot from "withRoot";
 import { DrawerItems } from "./components"
+import { Constance } from "config"
+import auth from 'auth'
 
 const DRAWER_WIDTH = 280;
 
@@ -25,6 +31,9 @@ class Navigation extends Component {
         super(props)
         this.state = {
             drawer_open: isMdScreen(window.innerWidth),
+            setAnchorEl: false,
+            anchorEl: false,
+            open: false,
         }
     }
 
@@ -38,6 +47,14 @@ class Navigation extends Component {
         }
         // this.props.history.push(path);
     };
+
+    handleMenu = (event) => {
+        this.state.setAnchorEl(event.currentTarget);
+    }
+
+    handleClose = () => {
+        this.state.setAnchorEl(null);
+    }
 
     render() {
         const { drawer_open } = this.state
@@ -59,8 +76,44 @@ class Navigation extends Component {
                             noWrap
                             className={classes.nav_header}
                         >
-                            {"Lazy-Dev"}
+                            {Constance.PROJECT_NAME}
                         </Typography>
+                        {!auth.isAuthenticated() && <Button color="inherit" onClick={() => {
+                            auth.login(() => {
+                                this.props.history.push("/app")
+                            })
+                        }}>Login</Button>}
+                        {auth.isAuthenticated() && (
+                            <div>
+                                <IconButton
+                                    aria-label="account of current user"
+                                    aria-controls="menu-appbar"
+                                    aria-haspopup="true"
+                                    onClick={this.handleMenu}
+                                    color="inherit"
+                                >
+                                    <AccountCircle />
+                                </IconButton>
+                                <Menu
+                                    id="menu-appbar"
+                                    anchorEl={this.state.anchorEl}
+                                    anchorOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    keepMounted
+                                    transformOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    open={this.state.open}
+                                    onClose={this.handleClose}
+                                >
+                                    <MenuItem onClick={this.handleClose}>Profile</MenuItem>
+                                    <MenuItem onClick={this.handleClose}>My account</MenuItem>
+                                </Menu>
+                            </div>
+                        )}
                     </Toolbar>
                 </AppBar>
                 <Hidden mdUp>
@@ -106,7 +159,7 @@ class Navigation extends Component {
                         />
                     </Drawer>
                 </Hidden>
-                <main className={( drawer_open ? classes.content2 : classes.content, classes.content_left, {
+                <main className={(drawer_open ? classes.content2 : classes.content, classes.content_left, {
                     [classes.content_shift]: drawer_open,
                     [classes.content_shift_left]: drawer_open
                 })}>

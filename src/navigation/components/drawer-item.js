@@ -5,7 +5,7 @@ import "@fortawesome/fontawesome-free-solid";
 
 import DrawerMenu from "./drawer-menu";
 import { PathConfig } from "config";
-import Logo from 'logo.svg';
+// import Logo from 'image/badminton-logo.png';
 
 const DrawerItems = ({
   onClick,
@@ -14,7 +14,7 @@ const DrawerItems = ({
 }) => (
   <div className={classes.root}>
     <div className={classes.drawer_header}>
-        <img src={Logo} alt="" className={classes.image_size}/>
+        {/* <img src={Logo} alt="" className={classes.image_size}/> */}
     </div>
     <Divider/>
     <DrawerMenu
