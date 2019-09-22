@@ -31,7 +31,6 @@ class Navigation extends Component {
         super(props)
         this.state = {
             drawer_open: isMdScreen(window.innerWidth),
-            setAnchorEl: false,
             anchorEl: false,
             open: false,
         }
@@ -49,11 +48,21 @@ class Navigation extends Component {
     };
 
     handleMenu = (event) => {
-        this.state.setAnchorEl(event.currentTarget);
+        this.setState({
+            anchorEl: event.currentTarget,
+            open: true,
+        });
     }
 
     handleClose = () => {
-        this.state.setAnchorEl(null);
+        this.setState({
+            anchorEl: false,
+            open: false,
+        });
+    }
+
+    handleLogout = () => {
+
     }
 
     render() {
@@ -109,8 +118,9 @@ class Navigation extends Component {
                                     open={this.state.open}
                                     onClose={this.handleClose}
                                 >
-                                    <MenuItem onClick={this.handleClose}>Profile</MenuItem>
-                                    <MenuItem onClick={this.handleClose}>My account</MenuItem>
+                                    <MenuItem onClick={this.handleClose}>{Constance.PROFILE}</MenuItem>
+                                    <MenuItem onClick={this.handleClose}>{Constance.MYACCOUNT}</MenuItem>
+                                    <MenuItem onClick={this.handleLogout}>{Constance.LOGOUT}</MenuItem>
                                 </Menu>
                             </div>
                         )}
